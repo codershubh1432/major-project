@@ -1,0 +1,15 @@
+<% layout("layouts/boilerplate") %>
+
+<h3 class="mt-4">Results for "<%= q %>"</h3>
+
+<div class="row mt-3">
+  <% if (listings.length === 0) { %>
+    <p>No listings found.</p>
+  <% } else { %>
+    <% listings.forEach(listing => { %>
+      <div class="col-md-3">
+        <%- include("../includes/listingCard", { listing }) %>
+      </div>
+    <% }) %>
+  <% } %>
+</div>

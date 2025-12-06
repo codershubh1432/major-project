@@ -1,0 +1,188 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  #filters {
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-items: center;
+    padding: 10px 0; /* 20px */
+    /* ADD: Enable horizontal scrolling for mobile */
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap; /* Keep content on a single line */
+  -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+  /* OPTIONAL: Hide the scrollbar */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; 
+  }
+
+  #filters::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+  .filter {
+    text-align: center;
+    opacity: 0.7;
+    /* margin-bottom: 1.3rem;   */
+    text-decoration: none; 
+    color: black; 
+    /* margin: 0 2rem 0 0; */
+    /* Adjusted margin for consistent spacing between filters */
+  margin: 0 1rem 0 0;
+  /* ADD: Ensure the filter items are displayed inline and don't wrap */
+  flex-shrink: 0; /* Prevents items from shrinking */
+  display: inline-block;
+  white-space: normal;
+    
+    
+  }
+
+  /* Add a margin to the first item for left alignment padding */
+#filters a:first-child {
+    margin-left: 20px;
+}
+
+  .filter:hover {
+     opacity: 1;
+     cursor: pointer;
+     border: 1px solid #00000020;
+     color: #fe424d;
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+    margin: 5px 0 0 0;
+  }
+
+  .tax-info {
+    display: none;
+  }
+
+  .tax-toggle {
+    border: 1px solid black;
+    border-radius: 1rem;
+    height: 3.25rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; 
+    margin-left: 20px;
+    /* margin-left: auto;
+    margin-right: 20px; */
+    /* ADD: Use flex-shrink to prevent the tax toggle from shrinking too small */
+  flex-shrink: 0;
+  /* Move the margin to the right to push it away from the icons */
+  margin-left: 20px;
+  }
+
+  .scroll-indicator {
+    /* Always visible element */
+    flex-shrink: 0; 
+    /* Position the arrow indicator (e.g., a small circle or shadow) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.25rem; /* Match the height of the tax-toggle */
+    padding-right: 10px;
+    /* You can use a slight gradient here to suggest more content, 
+       but for simplicity, we'll just use the arrow icon. */
+}
+
+</style>
+
+<!--new try div--><div style="display: flex; align-items: center; width: 100%; padding: 0;">
+
+<div id="filters">
+  <a href="/listings/filter/Trending" class="filter <%= category === 'Trending' ? 'active' : '' %>">
+    <i class="fa fa-fire"></i>
+    <p>Trending</p>
+  </a>
+  <a href="/listings/filter/Domes" class="filter <%= category === 'Domes' ? 'active' : '' %>">
+    <i class="fa fa-archway"></i>
+    <p>Domes</p>
+  </a>
+  <a href="/listings/filter/Rooms" class="filter <%= category === 'Rooms' ? 'active' : '' %>">
+    <i class="fa fa-bed"></i>
+    <p>Rooms</p>
+  </a>
+  <a href="/listings/filter/Iconic City" class="filter <%= category === 'Iconic City' ? 'active' : '' %>">
+    <i class="fa fa-city"></i>
+    <p>Iconic City</p>
+  </a>
+  <a href="/listings/filter/Mountain" class="filter <%= category === 'Mountain' ? 'active' : '' %>">
+    <i class="fa fa-mountain"></i>
+    <p>Mountain</p>
+  </a>
+  <a href="/listings/filter/Castles" class="filter <%= category === 'Castles' ? 'active' : '' %>">
+    <i class="fa fa-chess-rook"></i>
+    <p>Castles</p>
+  </a>
+  <a href="/listings/filter/Amazing Pools" class="filter <%= category === 'Amazing Pools' ? 'active' : '' %>">
+    <i class="fa fa-water"></i>
+    <p>Amazing Pools</p>
+  </a>
+  <a href="/listings/filter/Farms" class="filter <%= category === 'Farms' ? 'active' : '' %>">
+    <i class="fa fa-tractor"></i>
+    <p>Farms</p>
+  </a>
+  <a href="/listings/filter/Arctic" class="filter <%= category === 'Arctic' ? 'active' : '' %>">
+    <i class="fa fa-snowflake"></i>
+    <p>Arctic</p>
+  </a>
+  </div>
+
+ <div class="scroll-indicator d-flex">
+    <i class="fa fa-chevron-right fa-lg" style="color: #fe424d;"></i>
+</div>
+
+  <!-- Tax switch -->
+  <div class="filter tax-toggle">
+    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+    <label class="form-check-label" for="switchCheckDefault" style="margin-left:0.5rem;">Display Total after Taxes</label>
+  </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for (let listing of allListings) { %> 
+    <div class="col mb-4">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card" style="width: 20rem;">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;" />
+          
+          <div class="card-img-overlay">
+            shubh
+          </div>
+
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / night
+              <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const taxSwitch = document.getElementById("switchCheckDefault");
+
+    if (!taxSwitch) {
+        console.log("Switch element NOT found");
+        return;
+    }
+
+    taxSwitch.addEventListener("click", () => {
+        const taxInfo = document.getElementsByClassName("tax-info");
+        for (let info of taxInfo) {
+            info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+        }
+    });
+});
+</script>
+
+
+ 
+
