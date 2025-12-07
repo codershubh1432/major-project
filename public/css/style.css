@@ -100,21 +100,14 @@ font-weight: 400;
   background-color: white;
 }
 
-/* MAp */
-/* #map {
-height: 400px;
-width: 80vh;
-} */
-/* MAp - Corrected for Responsiveness */
+
 #map {
 height: 400px;
-/* Make map take 100% of its parent's width */
 width: 100%; 
-/* Ensure the map container never causes its contents to overflow */
 overflow: hidden; 
 }
 
-/* Custom Styles for Listing Details */
+/* Style for Listing Details */
 .listing-category {
     font-weight: 500;
 }
@@ -126,7 +119,6 @@ overflow: hidden;
     object-fit: cover;
 }
 
-/*  existing card styling if needed for consistency */
 .card-text p {
     font-weight: 400;
     
