@@ -2,41 +2,34 @@
 <style>
   #filters {
     display: flex;
-    /* flex-wrap: wrap; */
     align-items: center;
-    padding: 10px 0; /* 20px */
-    /* ADD: Enable horizontal scrolling for mobile */
+    padding: 10px 0; 
+    /*  horizontal scrolling for mobile */
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap; /* Keep content on a single line */
-  -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
-  /* OPTIONAL: Hide the scrollbar */
-  scrollbar-width: none;  /* Firefox */
+  white-space: nowrap; 
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;  
   -ms-overflow-style: none; 
   }
 
   #filters::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none; 
 }
 
   .filter {
     text-align: center;
     opacity: 0.7;
-    /* margin-bottom: 1.3rem;   */
     text-decoration: none; 
     color: black; 
-    /* margin: 0 2rem 0 0; */
-    /* Adjusted margin for consistent spacing between filters */
   margin: 0 1rem 0 0;
-  /* ADD: Ensure the filter items are displayed inline and don't wrap */
-  flex-shrink: 0; /* Prevents items from shrinking */
+  flex-shrink: 0; 
   display: inline-block;
   white-space: normal;
     
     
   }
 
-  /* Add a margin to the first item for left alignment padding */
 #filters a:first-child {
     margin-left: 20px;
 }
@@ -66,30 +59,22 @@
     align-items: center;
     flex-shrink: 0; 
     margin-left: 20px;
-    /* margin-left: auto;
-    margin-right: 20px; */
-    /* ADD: Use flex-shrink to prevent the tax toggle from shrinking too small */
   flex-shrink: 0;
-  /* Move the margin to the right to push it away from the icons */
   margin-left: 20px;
   }
 
   .scroll-indicator {
-    /* Always visible element */
     flex-shrink: 0; 
-    /* Position the arrow indicator (e.g., a small circle or shadow) */
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 3.25rem; /* Match the height of the tax-toggle */
+    height: 3.25rem; 
     padding-right: 10px;
-    /* You can use a slight gradient here to suggest more content, 
-       but for simplicity, we'll just use the arrow icon. */
 }
 
 </style>
 
-<!--new try div--><div style="display: flex; align-items: center; width: 100%; padding: 0;">
+<div style="display: flex; align-items: center; width: 100%; padding: 0;">
 
 <div id="filters">
   <a href="/listings/filter/Trending" class="filter <%= category === 'Trending' ? 'active' : '' %>">
