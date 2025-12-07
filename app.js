@@ -30,9 +30,7 @@ main().then(() => {
     console.log(err);
 });
 
-// async function main() {
-//      await mongoose.connect(MONGO_URL); for  local database
-// }
+
 
 async function main() {
      await mongoose.connect(dbUrl);
@@ -46,13 +44,6 @@ app.engine('ejs', ejsmate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 
-// const store = MongoStore.create({
-//   mongoUrl: dbUrl,
-//   crypto: {
-//     secret: "mysupersecretcode"
-//   },
-//   touchAfter: 24 * 3600,
-// });
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
@@ -109,6 +100,10 @@ app.use((req, res, next) => {
   res.locals.currUser = req.user;
   next();
 });
+
+app.get("/", (req, res) => {
+  res.render("home.ejs");
+}); // for online deploy homepage//
 
 
 app.use("/listings", listingRouter);
