@@ -101,9 +101,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// NEW: redirect root to All Places
 app.get("/", (req, res) => {
-  res.render("home.ejs");
-}); // for online deploy homepage//
+  res.redirect("/listings");
+});
+
+
 
 
 app.use("/listings", listingRouter);
