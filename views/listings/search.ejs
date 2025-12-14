@@ -8,7 +8,7 @@
   <% } else { %>
     <% listings.forEach(listing => { %>
       <div class="col-md-3">
-        <%- include("../includes/listingCard", { listing }) %>
+        <%- include("../includes/listingCard.ejs", { listing }) %>
       </div>
     <% }) %>
   <% } %>
