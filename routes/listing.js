@@ -1,5 +1,6 @@
 const express = require("express");
 // const router = express.Router();
+const ExpressError = require("../utils/ExpressError.js");
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
@@ -59,13 +60,17 @@ router.route("/:id")
 );
 
 // Book page for specific listing - GET /listings/:id/book
+// Book page for specific listing - GET /listings/:id/book
 router.get("/:id/book", wrapAsync(async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
     throw new ExpressError(404, "Listing not found");
   }
-  res.render("listings/book", { listing });
+  res.render("listings/book", { 
+    listing,
+    razorpayKey: process.env.RAZORPAY_KEY_ID   // ✅ send key to EJS
+  });
 }));
 
 
