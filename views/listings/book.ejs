@@ -1,3 +1,5 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
 async function payNow() {
   const res = await fetch("/listings/<%= listing._id %>/create-order", {
@@ -7,7 +9,7 @@ async function payNow() {
   const order = await res.json();
 
   var options = {
-    key: "<%= process.env.RAZORPAY_KEY_ID %>",
+    key: "<%= razorpayKey %>",   // ✅ from route
     amount: order.amount,
     currency: "INR",
     order_id: order.id,
