@@ -58,6 +58,17 @@ router.route("/:id")
 .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing)
 );
 
+// Book page for specific listing - GET /listings/:id/book
+router.get("/:id/book", wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  if (!listing) {
+    throw new ExpressError(404, "Listing not found");
+  }
+  res.render("listings/book", { listing });
+}));
+
+
 
 //Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm)
