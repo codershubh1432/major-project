@@ -1,0 +1,28 @@
+<script>
+async function payNow() {
+  const res = await fetch("/listings/<%= listing._id %>/create-order", {
+    method: "POST"
+  });
+
+  const order = await res.json();
+
+  var options = {
+    key: "<%= process.env.RAZORPAY_KEY_ID %>",
+    amount: order.amount,
+    currency: "INR",
+    order_id: order.id,
+    name: "Major Project",
+    handler: function (response) {
+      alert("Payment Successful!");
+      window.location.href = "/listings/<%= listing._id %>/confirm";
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
+}
+</script>
+
+<button onclick="payNow()" class="btn btn-success">
+  Pay ₹<%= listing.price %>
+</button>
