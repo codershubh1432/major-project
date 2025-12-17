@@ -62,6 +62,21 @@ router.route("/:id")
 //Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm)
 );
+   // razorpay route
+const razorpay = require("../utils/razorpay");
+
+router.post("/:id/create-order", async (req, res) => {
+  const listing = await Listing.findById(req.params.id);
+
+  const order = await razorpay.orders.create({
+    amount: listing.price * 100,
+    currency: "INR",
+    receipt: `receipt_${listing._id}`
+  });
+
+  res.json(order);
+});
+
 
 
 
