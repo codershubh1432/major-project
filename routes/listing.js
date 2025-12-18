@@ -80,6 +80,9 @@ router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderE
 );
 
 // razorpay route
+console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
+console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET ? "SET" : "NOT SET");
+
 const razorpay = require("../utils/razorpay");
 router.post("/:id/create-order", isLoggedIn, async (req, res) => {
   try {
