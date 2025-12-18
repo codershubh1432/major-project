@@ -78,20 +78,27 @@ router.get("/:id/book", wrapAsync(async (req, res) => {
 //Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm)
 );
-   // razorpay route
+
+// razorpay route
 const razorpay = require("../utils/razorpay");
 
-router.post("/:id/create-order", async (req, res) => {
-  const listing = await Listing.findById(req.params.id);
+router.post("/:id/create-order", isLoggedIn, async (req, res) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
 
-  const order = await razorpay.orders.create({
-    amount: listing.price * 100,
-    currency: "INR",
-    receipt: `receipt_${listing._id}`
-  });
+    const order = await razorpay.orders.create({
+      amount: listing.price * 100,
+      currency: "INR",
+      receipt: `receipt_${listing._id}`
+    });
 
-  res.json(order);
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Razorpay order failed" });
+  }
 });
+
 
 
 
