@@ -85,6 +85,9 @@ const razorpay = require("../utils/razorpay");
 router.post("/:id/create-order", isLoggedIn, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
+    console.log("Listing ID:", listing._id);
+console.log("Listing Price:", listing.price);
+
 
     const order = await razorpay.orders.create({
       amount: listing.price * 100,
