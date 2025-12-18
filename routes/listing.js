@@ -81,26 +81,34 @@ router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderE
 
 // razorpay route
 const razorpay = require("../utils/razorpay");
-
 router.post("/:id/create-order", isLoggedIn, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
-    console.log("Listing ID:", listing._id);
-console.log("Listing Price:", listing.price);
 
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
 
-    const order = await razorpay.orders.create({
-      amount: listing.price * 100,
+    if (!listing.price || isNaN(listing.price)) {
+      return res.status(400).json({ error: "Invalid listing price" });
+    }
+
+    const options = {
+      amount: listing.price * 100, // convert to paise
       currency: "INR",
-      receipt: `receipt_${listing._id}`
-    });
+      receipt: `receipt_${listing._id}`,
+    };
+
+    const order = await razorpay.orders.create(options);
 
     res.json(order);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Razorpay order failed" });
+    console.error("Razorpay Error:", err);
+    res.status(500).json({ error: err.message });
   }
 });
+
+
 
 
 
