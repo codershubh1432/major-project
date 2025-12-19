@@ -187,7 +187,7 @@ router.route("/:id")
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 // ------------------ BOOKING PAGE ------------------ //
-router.get("/:id/book", wrapAsync(async (req, res) => {
+router.get("/:id/book", isLoggedIn, wrapAsync(async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
