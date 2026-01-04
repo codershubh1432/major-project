@@ -9,7 +9,7 @@ async function payNow() {
   const order = await res.json();
 
   var options = {
-    key: "<%= razorpayKey %>",   // ✅ from route
+    key: "<%= razorpayKey %>",   //  from route
     amount: order.amount,
     currency: "INR",
     order_id: order.id,
