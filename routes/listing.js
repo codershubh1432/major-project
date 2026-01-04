@@ -82,8 +82,6 @@ router.get("/:id/book", isLoggedIn, wrapAsync(async (req, res) => {
 // ------------------ RAZORPAY ORDER ------------------ //
 router.post("/:id/create-order", isLoggedIn, wrapAsync(async (req, res) => {
   try {
-    // console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
-    // console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET ? "SET" : "NOT SET");
 
     const listing = await Listing.findById(req.params.id);
 
