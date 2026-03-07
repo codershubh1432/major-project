@@ -8,28 +8,97 @@
 <style>
 
 body{
-background:#f5f7fa;
+height:100vh;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Segoe UI;
 }
+
+/* Glass Card */
 
 .booking-card{
-max-width:500px;
-margin:50px auto;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-padding:25px;
-background:white;
+width:520px;
+backdrop-filter:blur(15px);
+background:rgba(255,255,255,0.08);
+border-radius:20px;
+border:1px solid rgba(255,255,255,0.2);
+padding:30px;
+color:white;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
-.price{
-font-size:22px;
-font-weight:bold;
-color:#28a745;
+/* Listing Image */
+
+.listing-img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:15px;
 }
+
+/* Title */
+
+.title{
+font-size:26px;
+font-weight:600;
+}
+
+/* Location */
+
+.location{
+opacity:0.8;
+margin-bottom:10px;
+}
+
+/* Price */
+
+.price{
+font-size:24px;
+font-weight:bold;
+color:#00ffb3;
+margin-bottom:20px;
+}
+
+/* Inputs */
+
+.form-control,
+.form-select{
+background:rgba(255,255,255,0.15);
+border:none;
+color:white;
+border-radius:10px;
+padding:10px;
+}
+
+.form-control::placeholder{
+color:#ddd;
+}
+
+.form-label{
+font-size:14px;
+opacity:0.9;
+}
+
+/* Book Button */
 
 .book-btn{
 width:100%;
+padding:14px;
 font-size:18px;
-padding:12px;
+border-radius:12px;
+border:none;
+background:linear-gradient(90deg,#00c6ff,#0072ff);
+color:white;
+font-weight:600;
+transition:0.3s;
+}
+
+.book-btn:hover{
+transform:scale(1.03);
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
 }
 
 </style>
@@ -39,13 +108,13 @@ padding:12px;
 
 <div class="booking-card">
 
-<h3 class="mb-3"><%= listing.title %></h3>
+<img src="<%= listing.image %>" class="listing-img">
 
-<p class="text-muted"><%= listing.location %></p>
+<div class="title"><%= listing.title %></div>
 
-<hr>
+<div class="location">📍 <%= listing.location %></div>
 
-<div class="price mb-3">
+<div class="price">
 ₹ <%= listing.price %> / night
 </div>
 
@@ -63,7 +132,7 @@ padding:12px;
 
 <div class="mb-3">
 <label class="form-label">Guests</label>
-<select class="form-control">
+<select class="form-select">
 <option>1 Guest</option>
 <option>2 Guests</option>
 <option>3 Guests</option>
@@ -78,15 +147,9 @@ padding:12px;
 
 </form>
 
-<hr>
-
-<div class="d-grid">
-
-<button onclick="payNow()" class="btn btn-success book-btn">
+<button onclick="payNow()" class="book-btn">
 Book Now & Pay ₹<%= listing.price %>
 </button>
-
-</div>
 
 </div>
 
@@ -110,11 +173,9 @@ currency:"INR",
 order_id:order.id,
 
 name:"Business Management & Travel Booking",
-
 description:"Hotel Booking Payment",
 
 handler:function(response){
-
 
 window.location.href="/listings/<%= listing._id %>/confirm";
 
