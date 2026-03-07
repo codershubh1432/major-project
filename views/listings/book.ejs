@@ -1,30 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Booking Page</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+.booking-card{
+max-width:500px;
+margin:50px auto;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+padding:25px;
+background:white;
+}
+
+.price{
+font-size:22px;
+font-weight:bold;
+color:#28a745;
+}
+
+.book-btn{
+width:100%;
+font-size:18px;
+padding:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="booking-card">
+
+<h3 class="mb-3"><%= listing.title %></h3>
+
+<p class="text-muted"><%= listing.location %></p>
+
+<hr>
+
+<div class="price mb-3">
+₹ <%= listing.price %> / night
+</div>
+
+<form>
+
+<div class="mb-3">
+<label class="form-label">Check In</label>
+<input type="date" class="form-control">
+</div>
+
+<div class="mb-3">
+<label class="form-label">Check Out</label>
+<input type="date" class="form-control">
+</div>
+
+<div class="mb-3">
+<label class="form-label">Guests</label>
+<select class="form-control">
+<option>1 Guest</option>
+<option>2 Guests</option>
+<option>3 Guests</option>
+<option>4 Guests</option>
+</select>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Special Request</label>
+<textarea class="form-control" rows="2" placeholder="Any special request..."></textarea>
+</div>
+
+</form>
+
+<hr>
+
+<div class="d-grid">
+
+<button onclick="payNow()" class="btn btn-success book-btn">
+Book Now & Pay ₹<%= listing.price %>
+</button>
+
+</div>
+
+</div>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+
 async function payNow() {
-  const res = await fetch("/listings/<%= listing._id %>/create-order", {
-    method: "POST"
-  });
 
-  const order = await res.json();
+const res = await fetch("/listings/<%= listing._id %>/create-order",{
+method:"POST"
+});
 
-  var options = {
-    key: "<%= razorpayKey %>",   //  from route
-    amount: order.amount,
-    currency: "INR",
-    order_id: order.id,
-    name: "Major Project",
-    handler: function (response) {
-      alert("Payment Successful!");
-      window.location.href = "/listings/<%= listing._id %>/confirm";
-    }
-  };
+const order = await res.json();
 
-  var rzp = new Razorpay(options);
-  rzp.open();
+var options = {
+
+key:"<%= razorpayKey %>",
+amount:order.amount,
+currency:"INR",
+order_id:order.id,
+
+name:"Business Management & Travel Booking",
+
+description:"Hotel Booking Payment",
+
+handler:function(response){
+
+alert("Payment Successful!");
+
+window.location.href="/listings/<%= listing._id %>/confirm";
+
 }
+
+};
+
+var rzp = new Razorpay(options);
+
+rzp.open();
+
+}
+
 </script>
 
-<button onclick="payNow()" class="btn btn-success">
-  Pay ₹<%= listing.price %>
-</button>
+</body>
+</html>
