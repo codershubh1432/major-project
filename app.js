@@ -105,8 +105,11 @@ app.get("/", (req, res) => {
 app.get("/listings/:id/confirm", async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const listing = await Listing.findById(id);
-    res.render("successpage", { listing });
+
+    res.render("listings/successpage", { listing });
+
   } catch (err) {
     next(err);
   }
