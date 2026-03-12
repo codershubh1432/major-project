@@ -4,8 +4,6 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 // Nodemailer transporter
-const nodemailer = require("nodemailer");
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
