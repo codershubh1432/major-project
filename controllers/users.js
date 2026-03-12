@@ -15,6 +15,14 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
+// 🔎 Check SMTP connection
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log("SMTP Error:", error);
+  } else {
+    console.log("SMTP server is ready to send messages");
+  }
+});
 
 // SIGNUP FORM
 module.exports.renderSignupForm = (req, res) => {
