@@ -13,7 +13,10 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: "a4bb25001@smtp-brevo.com",
     pass: process.env.EMAIL_PASS
-  }
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  debug: true
 });
 //  Check SMTP connection
 transporter.verify(function (error, success) {
