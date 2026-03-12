@@ -99,7 +99,7 @@ module.exports.sendResetEmail = async (req, res) => {
 
   await transporter.sendMail({
     to: user.email,
-    from: process.env.EMAIL_USER,
+    from: "shubhamshingne9@gmail.com",
     subject: "Password Reset",
     html: `
       <h2>Password Reset</h2>
