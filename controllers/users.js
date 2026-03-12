@@ -3,9 +3,15 @@ const User = require("../models/user");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
+const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first");
+
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  family: 4, // force IPv4
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -19,7 +25,7 @@ module.exports.renderSignupForm = (req, res) => {
 };
 
 // SIGNUP
-module.exports.signup = async (req, res) => {
+module.exports.signup = async (req, res, next) => {
   try {
     let { username, email, password } = req.body;
 
