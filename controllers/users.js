@@ -3,21 +3,18 @@ const User = require("../models/user");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
-const dns = require("dns");
-dns.setDefaultResultOrder("ipv4first");
+
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
-  family: 4, // force IPv4
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
 });
-
 
 // SIGNUP FORM
 module.exports.renderSignupForm = (req, res) => {
