@@ -1,30 +1,20 @@
-//new code
+// 
+
+//new code 
+// IMPORTS
 const User = require("../models/user");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
+
+// BREVO API CONFIG
+const client = SibApiV3Sdk.ApiClient.instance;
+const apiKey = client.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
 
-
-// Nodemailer transporter
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "a4bb25001@smtp-brevo.com",
-    pass: process.env.EMAIL_PASS
-  },
-  connectionTimeout: 20000,
-  greetingTimeout: 20000
-});
-//  Check SMTP connection
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log("SMTP Error:", error);
-  } else {
-    console.log("SMTP server is ready to send messages");
-  }
-});
+// ===============================
+// SIGNUP
+// ===============================
 
 // SIGNUP FORM
 module.exports.renderSignupForm = (req, res) => {
@@ -40,9 +30,8 @@ module.exports.signup = async (req, res, next) => {
     const registeredUser = await User.register(newUser, password);
 
     req.login(registeredUser, (err) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
+
       req.flash("success", "Welcome to Wanderlust!");
       res.redirect("/listings");
     });
@@ -52,6 +41,11 @@ module.exports.signup = async (req, res, next) => {
     res.redirect("/signup");
   }
 };
+
+
+// ===============================
+// LOGIN
+// ===============================
 
 // LOGIN FORM
 module.exports.renderLoginForm = (req, res) => {
@@ -65,30 +59,32 @@ module.exports.login = async (req, res) => {
   res.redirect(redirectUrl);
 };
 
+
+// ===============================
 // LOGOUT
+// ===============================
+
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
+    if (err) return next(err);
+
     req.flash("success", "You are logged out!");
     res.redirect("/listings");
   });
 };
 
 
-
 // ===============================
 // FORGOT PASSWORD SYSTEM
 // ===============================
 
-// Render forgot password page
+// FORGOT PASSWORD PAGE
 module.exports.renderForgotForm = (req, res) => {
   res.render("users/forgot.ejs");
 };
 
 
-// Send reset email
+// SEND RESET EMAIL
 module.exports.sendResetEmail = async (req, res) => {
 
   const user = await User.findOne({ email: req.body.email });
@@ -107,25 +103,40 @@ module.exports.sendResetEmail = async (req, res) => {
 
   const resetLink = `${process.env.BASE_URL}/reset-password/${token}`;
 
-  await transporter.sendMail({
-    to: user.email,
-    from: "shubhamshingne9@gmail.com",
-    subject: "Password Reset",
-    html: `
-      <h2>Password Reset</h2>
-      <p>Click the link below to reset your password:</p>
-      <a href="${resetLink}">${resetLink}</a>
-      <p>This link will expire in 1 hour.</p>
-    `
-  });
+  try {
 
-  req.flash("success", "Reset link sent to your email");
-  res.redirect("/login");
+    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+    await apiInstance.sendTransacEmail({
+      sender: { 
+        email: "shubhamshingne9@gmail.com", 
+        name: "Wanderlust" 
+      },
+      to: [{ email: user.email }],
+      subject: "Password Reset",
+      htmlContent: `
+        <h2>Password Reset</h2>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetLink}">${resetLink}</a>
+        <p>This link will expire in 1 hour.</p>
+      `
+    });
+
+    req.flash("success", "Reset link sent to your email");
+    res.redirect("/login");
+
+  } catch (err) {
+    console.log("EMAIL ERROR:", err);
+    req.flash("error", "Email could not be sent");
+    res.redirect("/forgot-password");
+  }
 };
 
 
+// ===============================
+// RESET PASSWORD FORM
+// ===============================
 
-// Render reset password page
 module.exports.renderResetForm = async (req, res) => {
 
   const user = await User.findOne({
@@ -142,8 +153,10 @@ module.exports.renderResetForm = async (req, res) => {
 };
 
 
+// ===============================
+// SAVE NEW PASSWORD
+// ===============================
 
-// Save new password
 module.exports.resetPassword = async (req, res) => {
 
   const user = await User.findOne({
