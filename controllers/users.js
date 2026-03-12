@@ -169,13 +169,15 @@ module.exports.resetPassword = async (req, res) => {
     return res.redirect("/forgot-password");
   }
 
+  // change password using passport-local-mongoose
   await user.setPassword(req.body.password);
 
+  // remove reset token
   user.resetToken = undefined;
   user.resetTokenExpiry = undefined;
 
   await user.save();
 
-  req.flash("success", "Password updated successfully");
+  req.flash("success", "Password updated successfully. Please login.");
   res.redirect("/login");
 };
