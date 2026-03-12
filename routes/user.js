@@ -7,18 +7,40 @@ const { saveRedirectUrl } = require("../middleware.js");
 
 const userController = require("../controllers/users.js");
 
+// router.route("/signup")
+// .get(userController.renderSignupForm)
+// .post(wrapAsync(userController.signup));
+
+// router.route("/login")
+// .get(userController.renderLoginForm)
+// .post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: '/login', failureFlash: true }),userController.login
+// );
+
+
+
+// router.get("/logout", userController.logout);
+
+
+// module.exports = router;
 router.route("/signup")
 .get(userController.renderSignupForm)
 .post(wrapAsync(userController.signup));
 
 router.route("/login")
 .get(userController.renderLoginForm)
-.post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: '/login', failureFlash: true }),userController.login
+.post(
+saveRedirectUrl,
+passport.authenticate("local", { failureRedirect: '/login', failureFlash: true }),
+userController.login
 );
-
-
 
 router.get("/logout", userController.logout);
 
+// forgot password
+router.get("/forgot-password", userController.renderForgotForm);
+router.post("/forgot-password", wrapAsync(userController.sendResetEmail));
+
+router.get("/reset-password/:token", wrapAsync(userController.renderResetForm));
+router.post("/reset-password/:token", wrapAsync(userController.resetPassword));
 
 module.exports = router;
